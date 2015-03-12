@@ -1,4 +1,4 @@
-DCOS HelloWorld Subcommand
+DCOS Spark Subcommand
 ==========================
 Basic DCOS subcommand
 
