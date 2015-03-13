@@ -1,0 +1,4 @@
+.tox
+env
+dcos_spark.egg-info
+tests/integration/__pycache__
