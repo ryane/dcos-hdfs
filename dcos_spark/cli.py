@@ -5,19 +5,26 @@ Usage:
 
 Options:
     --help           Show this screen
+    --info           Show info
     --version        Show version
 """
 import docopt
-from dcos_spark import constants
+from dcos_spark import constants, spark_submit
+
+
+def run_spark_job(args):
+    # How do I get the marathon uri, and dispatcher endpoint?
 
 
 def main():
     args = docopt.docopt(
         __doc__,
-        version='dcos-marathon version {}'.format(constants.version))
+        version='dcos-spark version {}'.format(constants.version))
 
     if args['spark'] and args['info']:
-        print('Example of a DCOS subcommand')
+        print('Run and manage Spark jobs')
+    elif args['spark'] and args['run']:
+        return run_spark_job(args)
     else:
         print(__doc__)
         return 1
