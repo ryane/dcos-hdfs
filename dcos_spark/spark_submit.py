@@ -6,3 +6,4 @@
      --driver-memory 1G http://10.127.131.174:8000/spark-examples_2.10-1.3.0-SNAPSHOT.jar 30
 """
 def spark_submit(master, jar, appArgs, extraLibs, otherArgs, main_class = ""):
+    return 0

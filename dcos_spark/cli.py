@@ -14,7 +14,7 @@ from dcos_spark import constants, spark_submit
 
 def run_spark_job(args):
     # How do I get the marathon uri, and dispatcher endpoint?
-
+    return 0
 
 def main():
     args = docopt.docopt(
