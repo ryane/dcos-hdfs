@@ -6,13 +6,4 @@ def test_help():
         ['dcos-spark', 'spark', '--help'])
 
     assert returncode == 0
-    assert stdout == b"""DCOS Spark Example Subcommand
-
-Usage:
-    dcos spark info
-
-Options:
-    --help           Show this screen
-    --version        Show version
-"""
     assert stderr == b''
