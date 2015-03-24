@@ -4,5 +4,5 @@ build
 env
 dcos_spark.egg-info
 tests/integration/__pycache__
-dcos-spark/data/spark**
+dcos_spark/data/spark**
 **.pyc
