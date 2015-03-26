@@ -13,7 +13,8 @@ def job_status(master, submissionId):
     response = run(master, ["--status", submissionId])
     if response[0] != None:
         print "Submission ID: " + response[0]['submissionId']
-        print "Job status: " + response[0]['driverState']
+        print "Driver state: " + response[0]['driverState']
+        print "Last status: " + response[0]['message']
     return response[1]
 
 def kill_job(master, submissionId):
