@@ -1,6 +1,8 @@
 from dcos_spark import constants
 import pkg_resources
 import subprocess
+import os
+import os.path
 import json
 
 def submit_job(master, args):
@@ -28,6 +30,22 @@ def kill_job(master, submissionId):
         print "Message: " + response[0]['message']
     return response[1]
 
+def check_java():
+    # Check if JAVA is in the PATH
+    process = subprocess.Popen(
+        "which java", shell=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE)
+    if process.returncode == 0:
+        return True
+
+    # Check if JAVA_HOME is set and find java
+    java_home = os.environ.get('JAVA_HOME')
+    if java_home != None and os.path.isfile(java_home + "/bin/java"):
+        return True
+
+    return False
+
 """
   This method runs spark_submit with the passed in parameters.
   ie: ./bin/spark-submit --deploy-mode cluster --class org.apache.spark.examples.SparkPi
@@ -35,6 +53,10 @@ def kill_job(master, submissionId):
      --driver-memory 1G http://10.127.131.174:8000/spark-examples_2.10-1.3.0-SNAPSHOT.jar 30
 """
 def run(master, args):
+    if not check_java():
+        print "DCOS Spark requires Java to be installed. Please install JRE."
+        return 1
+
     submit_file = pkg_resources.resource_filename(
         'dcos_spark',
         'data/' + constants.spark_version + '/bin/spark-submit')
