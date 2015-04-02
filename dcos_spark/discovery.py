@@ -30,12 +30,11 @@ def get_spark_dispatcher():
             sys.exit(1)
 
         spark_task = tasks[0]
+        # Parse the port from the command line flag
+        task_args = spark_task["cmd"].split(" ")
+        dispatcher_port = task_args[task_args.index("--port") + 1]
 
-        if len(spark_task["ports"]) == 0:
-            print "No port found from the running task."
-            sys.exit(1)
-
-        return "mesos://" + spark_task["host"] + ":" + str(spark_task["ports"][0])
+        return "mesos://" + spark_task["host"] + ":" + dispatcher_port
     else:
         print "Bad response getting marathon app def. Status code: " + str(response.status_code)
         sys.exit(1)
