@@ -14,18 +14,19 @@ Options:
     --version               Show version
 """
 import docopt
-from dcos_spark import constants, dcos, spark_submit
+from dcos_spark import constants, dcos, discovery, spark_submit
 
-master = "10.51.128.131:7077"
+def master():
+    return discovery.get_spark_dispatcher()
 
 def run_spark_job(args):
-    return spark_submit.submit_job(master, args['<args>'])
+    return spark_submit.submit_job(master(), args['<args>'])
 
 def job_status(args):
-    return spark_submit.job_status(master, args['<submissionId>'])
+    return spark_submit.job_status(master(), args['<submissionId>'])
 
 def kill_job(args):
-    return spark_submit.kill_job(master, args['<submissionId>'])
+    return spark_submit.kill_job(master(), args['<submissionId>'])
 
 def main():
     args = docopt.docopt(
