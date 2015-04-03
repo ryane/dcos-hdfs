@@ -6,7 +6,12 @@ import os.path
 import json
 
 def submit_job(master, args):
-    response = run(master, args)
+    executor_uri = os.environ.get("SPARK_EXECUTOR_URI")
+    if executor_uri is None:
+        # Set default executor_uri
+        executor_uri = constants.spark_executor_uri
+
+    response = run(master, args, {"SPARK_EXECUTOR_URI": executor_uri})
     if response[0] != None:
         print "Run job succeeded. Submission id: " + response[0]['submissionId']
     return response[1]
@@ -52,7 +57,7 @@ def check_java():
       --master mesos://10.127.131.174:8077 --executor-memory 1G --total-executor-cores 100
      --driver-memory 1G http://10.127.131.174:8000/spark-examples_2.10-1.3.0-SNAPSHOT.jar 30
 """
-def run(master, args):
+def run(master, args, env_vars = {}):
     if not check_java():
         print "DCOS Spark requires Java to be installed. Please install JRE."
         return 1
@@ -65,6 +70,7 @@ def run(master, args):
 
     process = subprocess.Popen(
             command,
+            env = dict(os.environ, **env_vars),
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE)
 

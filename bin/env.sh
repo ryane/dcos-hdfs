@@ -22,8 +22,8 @@ pip install -r $BASEDIR/requirements.txt
 if [ ! -d "$BASEDIR/dcos_spark/data/spark*" ]; then
     pushd .
     cd $BASEDIR/dcos_spark/data
-    wget http://downloads.mesosphere.com.s3.amazonaws.com/assets/spark/spark-1.3.0-SNAPSHOT-bin-1.0.4.tgz
-    tar xvf spark-1.3.0-SNAPSHOT-bin-1.0.4.tgz
-    rm spark-1.3.0-SNAPSHOT-bin-1.0.4.tgz
+    wget http://downloads.mesosphere.com.s3.amazonaws.com/assets/spark/spark-1.4.0-SNAPSHOT-bin-2.2.0.tgz
+    tar xvf spark-1.4.0-SNAPSHOT-bin-2.2.0.tgz
+    rm spark-1.4.0-SNAPSHOT-bin-2.2.0.tgz
     popd
 fi

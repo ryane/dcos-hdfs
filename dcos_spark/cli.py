@@ -7,6 +7,7 @@ Usage:
     dcos spark run [<args>...]
     dcos spark status <submissionId>
     dcos spark kill <submissionId>
+    dcos spark webui
 
 Options:
     --help                  Show this screen
@@ -28,6 +29,10 @@ def job_status(args):
 def kill_job(args):
     return spark_submit.kill_job(master(), args['<submissionId>'])
 
+def print_webui(args):
+    print discovery.get_spark_webui()
+    return 0
+
 def main():
     args = docopt.docopt(
         __doc__,
@@ -42,6 +47,8 @@ def main():
         return job_status(args)
     elif args['kill']:
         return kill_job(args)
+    elif args['webui']:
+        return print_webui(args)
     else:
         print(__doc__)
         return 1
