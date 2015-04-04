@@ -39,13 +39,34 @@ def kill_job(master, submissionId):
     return response[1]
 
 
+def which(program):
+    """Returns the path to the named executable program.
+
+    :param program: The program to locate:
+    :type program: str
+    :rtype: str
+    """
+
+    def is_exe(file_path):
+        return os.path.isfile(file_path) and os.access(file_path, os.X_OK)
+
+    file_path, filename = os.path.split(program)
+    if file_path:
+        if is_exe(program):
+            return program
+    elif constants.PATH_ENV in os.environ:
+        for path in os.environ[constants.PATH_ENV].split(os.pathsep):
+            path = path.strip('"')
+            exe_file = os.path.join(path, program)
+            if is_exe(exe_file):
+                return exe_file
+
+    return None
+
+
 def check_java():
     # Check if JAVA is in the PATH
-    process = subprocess.Popen(
-        "which java", shell=True,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE)
-    if process.returncode == 0:
+    if which('java') is not None:
         return True
 
     # Check if JAVA_HOME is set and find java
