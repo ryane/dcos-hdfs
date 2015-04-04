@@ -94,7 +94,7 @@ def run(master, args, env_vars={}):
         'data/' + constants.spark_version + '/bin/spark-submit')
 
     command = [submit_file, "--deploy-mode", "cluster", "--master",
-               "mesos://" + master] + args
+               "mesos://" + master, args]
 
     process = subprocess.Popen(
         command,
