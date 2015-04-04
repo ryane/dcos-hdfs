@@ -1,9 +1,10 @@
-from dcos_spark import constants
-import pkg_resources
-import subprocess
+import json
 import os
 import os.path
-import json
+import subprocess
+
+import pkg_resources
+from dcos_spark import constants
 
 
 def submit_job(master, args):
@@ -14,7 +15,8 @@ def submit_job(master, args):
 
     response = run(master, args, {"SPARK_EXECUTOR_URI": executor_uri})
     if response[0] is not None:
-        print "Run job succeeded. Submission id: " + response[0]['submissionId']
+        print("Run job succeeded. Submission id: " +
+              response[0]['submissionId'])
     return response[1]
 
 
