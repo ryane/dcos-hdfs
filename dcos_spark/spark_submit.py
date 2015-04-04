@@ -5,6 +5,7 @@ import os
 import os.path
 import json
 
+
 def submit_job(master, args):
     executor_uri = os.environ.get("SPARK_EXECUTOR_URI")
     if executor_uri is None:
@@ -12,21 +13,23 @@ def submit_job(master, args):
         executor_uri = constants.spark_executor_uri
 
     response = run(master, args, {"SPARK_EXECUTOR_URI": executor_uri})
-    if response[0] != None:
+    if response[0] is not None:
         print "Run job succeeded. Submission id: " + response[0]['submissionId']
     return response[1]
 
+
 def job_status(master, submissionId):
     response = run(master, ["--status", submissionId])
-    if response[0] != None:
+    if response[0] is not None:
         print "Submission ID: " + response[0]['submissionId']
         print "Driver state: " + response[0]['driverState']
         print "Last status: " + response[0]['message']
     return response[1]
 
+
 def kill_job(master, submissionId):
     response = run(master, ["--kill", submissionId])
-    if response[0] != None:
+    if response[0] is not None:
         if bool(response[0]['success']):
             success = "succeeded."
         else:
@@ -34,6 +37,7 @@ def kill_job(master, submissionId):
         print "Kill job " + success
         print "Message: " + response[0]['message']
     return response[1]
+
 
 def check_java():
     # Check if JAVA is in the PATH
@@ -46,33 +50,36 @@ def check_java():
 
     # Check if JAVA_HOME is set and find java
     java_home = os.environ.get('JAVA_HOME')
-    if java_home != None and os.path.isfile(java_home + "/bin/java"):
+    if java_home is not None and os.path.isfile(java_home + "/bin/java"):
         return True
 
     return False
 
-"""
-  This method runs spark_submit with the passed in parameters.
-  ie: ./bin/spark-submit --deploy-mode cluster --class org.apache.spark.examples.SparkPi
-      --master mesos://10.127.131.174:8077 --executor-memory 1G --total-executor-cores 100
-     --driver-memory 1G http://10.127.131.174:8000/spark-examples_2.10-1.3.0-SNAPSHOT.jar 30
-"""
-def run(master, args, env_vars = {}):
+
+def run(master, args, env_vars={}):
+    """
+    This method runs spark_submit with the passed in parameters.
+    ie: ./bin/spark-submit --deploy-mode cluster --class
+    org.apache.spark.examples.SparkPi --master mesos://10.127.131.174:8077
+    --executor-memory 1G --total-executor-cores 100 --driver-memory 1G
+    http://10.127.131.174:8000/spark-examples_2.10-1.3.0-SNAPSHOT.jar 30
+    """
     if not check_java():
         print "DCOS Spark requires Java to be installed. Please install JRE."
-        return 1
+        return (None, 1)
 
     submit_file = pkg_resources.resource_filename(
         'dcos_spark',
         'data/' + constants.spark_version + '/bin/spark-submit')
 
-    command = [submit_file, "--deploy-mode", "cluster", "--master", "mesos://" + master] + args
+    command = [submit_file, "--deploy-mode", "cluster", "--master",
+               "mesos://" + master] + args
 
     process = subprocess.Popen(
-            command,
-            env = dict(os.environ, **env_vars),
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE)
+        command,
+        env=dict(os.environ, **env_vars),
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE)
 
     stdout, stderr = process.communicate()
 

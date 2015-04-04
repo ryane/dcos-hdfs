@@ -1,10 +1,10 @@
-"""DCOS Spark
+"""Run and manage Spark jobs
 
 Usage:
     dcos spark --help
     dcos spark --info
     dcos spark --version
-    dcos spark run [<args>...]
+    dcos spark run --submit-args=<spark-args>
     dcos spark status <submissionId>
     dcos spark kill <submissionId>
     dcos spark webui
@@ -15,32 +15,37 @@ Options:
     --version               Show version
 """
 import docopt
-from dcos_spark import constants, dcos, discovery, spark_submit
+from dcos_spark import constants, discovery, spark_submit
+
 
 def master():
     return discovery.get_spark_dispatcher()
 
+
 def run_spark_job(args):
-    return spark_submit.submit_job(master(), args['<args>'])
+    return spark_submit.submit_job(master(), args['--submit-args'])
+
 
 def job_status(args):
     return spark_submit.job_status(master(), args['<submissionId>'])
 
+
 def kill_job(args):
     return spark_submit.kill_job(master(), args['<submissionId>'])
+
 
 def print_webui(args):
     print discovery.get_spark_webui()
     return 0
 
+
 def main():
     args = docopt.docopt(
         __doc__,
-        version='dcos-spark version {}'.format(constants.version),
-        options_first=True)
+        version='dcos-spark version {}'.format(constants.version))
 
     if args['--info']:
-        print('Run and manage Spark jobs')
+        print(__doc__.split('\n')[0])
     elif args['run']:
         return run_spark_job(args)
     elif args['status']:
