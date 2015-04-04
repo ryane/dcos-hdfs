@@ -1,15 +1,35 @@
+import os
 from setuptools import setup, find_packages
 from codecs import open
-from os import path
 
 from dcos_spark import constants
 
 
-here = path.abspath(path.dirname(__file__))
+here = os.path.abspath(os.path.dirname(__file__))
 
 # Get the long description from the relevant file
-with open(path.join(here, 'README.rst'), encoding='utf-8') as f:
+with open(os.path.join(here, 'README.rst'), encoding='utf-8') as f:
     long_description = f.read()
+
+
+def get_filepaths(package, directory):
+    """
+    This function will generate the file names in a directory
+    tree by walking the tree either top-down or bottom-up. For each
+    directory in the tree rooted at directory top (including top itself),
+    it yields a 3-tuple (dirpath, dirnames, filenames).
+    """
+    file_paths = []  # List which will store all of the full filepaths.
+
+    # Walk the tree.
+    for root, directories, files in os.walk(os.path.join(package, directory)):
+        for filename in files:
+            # Join the two strings in order to form the full filepath.
+            filepath = os.path.join(root, filename)
+            file_paths.append(os.path.relpath(filepath, package))
+
+    return file_paths
+
 
 setup(
     name='dcos-spark',
@@ -85,7 +105,9 @@ setup(
     # If there are data files included in your packages that need to be
     # installed, specify them here.  If using Python 2.6 or less, then these
     # have to be included in MANIFEST.in as well.
-    package_data={'dcos_spark': ['data/*']},
+    package_data={
+        'dcos_spark': get_filepaths('dcos_spark', 'data'),
+    },
 
     # Although 'package_data' is the preferred approach, in some case you may
     # need to place data files outside of your packages.
