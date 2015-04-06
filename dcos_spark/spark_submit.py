@@ -5,14 +5,20 @@ import os
 import os.path
 import json
 
+def partition(args, pred):
+    ain = []
+    aout = []
+    for x in args:
+        if pred(x):
+            ain.append(x)
+        else:
+            aout.append(x)
+    return (ain, aout)
 
 def submit_job(master, args):
-    executor_uri = os.environ.get("SPARK_EXECUTOR_URI")
-    if executor_uri is None:
-        # Set default executor_uri
-        executor_uri = constants.spark_executor_uri
-
-    response = run(master, args, {"SPARK_EXECUTOR_URI": executor_uri})
+    (props, args) = partition(args.split(" "), lambda a: a.startswith("-D"))
+    props = props + ["-Dspark.mesos.executor.docker.image=" + constants.spark_mesos_image]
+    response = run(master, args, props)
     if response[0] is not None:
         print "Run job succeeded. Submission id: " + response[0]['submissionId']
     return response[1]
@@ -77,7 +83,7 @@ def check_java():
     return False
 
 
-def run(master, args, env_vars={}):
+def run(master, args, props = []):
     """
     This method runs spark_submit with the passed in parameters.
     ie: ./bin/spark-submit --deploy-mode cluster --class
@@ -94,11 +100,11 @@ def run(master, args, env_vars={}):
         'data/' + constants.spark_version + '/bin/spark-submit')
 
     command = [submit_file, "--deploy-mode", "cluster", "--master",
-               "mesos://" + master, args]
+               "mesos://" + master] +  args
 
     process = subprocess.Popen(
         command,
-        env=dict(os.environ, **env_vars),
+        env = dict(os.environ, **{"SPARK_JAVA_OPTS": ' '.join(props)}),
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE)
 
