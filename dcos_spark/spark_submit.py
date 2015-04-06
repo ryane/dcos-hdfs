@@ -15,6 +15,28 @@ def partition(args, pred):
             aout.append(x)
     return (ain, aout)
 
+def show_help():
+    submit_file = pkg_resources.resource_filename(
+        'dcos_spark',
+        'data/' + constants.spark_version + '/bin/spark-submit')
+
+    command = [submit_file, "--help"]
+
+    process = subprocess.Popen(
+        command,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE)
+
+    stdout, stderr = process.communicate()
+
+    for line in stderr.split("\n"):
+        if line.startswith("Usage:"):
+            continue
+        print line
+
+    return 0
+
+
 def submit_job(master, args):
     (props, args) = partition(args.split(" "), lambda a: a.startswith("-D"))
     props = props + ["-Dspark.mesos.executor.docker.image=" + constants.spark_mesos_image]
@@ -100,7 +122,7 @@ def run(master, args, props = []):
         'data/' + constants.spark_version + '/bin/spark-submit')
 
     command = [submit_file, "--deploy-mode", "cluster", "--master",
-               "mesos://" + master] +  args
+               "mesos://" + master] + args
 
     process = subprocess.Popen(
         command,

@@ -4,6 +4,7 @@ Usage:
     dcos spark --help
     dcos spark --info
     dcos spark --version
+    dcos spark run --help
     dcos spark run --submit-args=<spark-args>
     dcos spark status <submissionId>
     dcos spark kill <submissionId>
@@ -25,6 +26,9 @@ def master():
 def run_spark_job(args):
     return spark_submit.submit_job(master(), args['--submit-args'])
 
+def show_spark_submit_help():
+    return spark_submit.show_help()
+
 
 def job_status(args):
     return spark_submit.job_status(master(), args['<submissionId>'])
@@ -38,14 +42,15 @@ def print_webui(args):
     print discovery.get_spark_webui()
     return 0
 
-
 def main():
     args = docopt.docopt(
         __doc__,
-        version='dcos-spark version {}'.format(constants.version))
+        version='dcos-spark version {}'.format(constants.version), help=False)
 
     if args['--info']:
         print(__doc__.split('\n')[0])
+    elif args['run'] and args['--help']:
+        return show_spark_submit_help()
     elif args['run']:
         return run_spark_job(args)
     elif args['status']:
