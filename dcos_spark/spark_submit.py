@@ -1,9 +1,10 @@
-from dcos_spark import constants
-import pkg_resources
-import subprocess
+import json
 import os
 import os.path
-import json
+import subprocess
+
+import pkg_resources
+from dcos_spark import constants
 
 def partition(args, pred):
     ain = []
@@ -42,7 +43,8 @@ def submit_job(master, args):
     props = props + ["-Dspark.mesos.executor.docker.image=" + constants.spark_mesos_image]
     response = run(master, args, props)
     if response[0] is not None:
-        print "Run job succeeded. Submission id: " + response[0]['submissionId']
+        print("Run job succeeded. Submission id: " +
+              response[0]['submissionId'])
     return response[1]
 
 
