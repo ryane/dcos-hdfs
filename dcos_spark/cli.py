@@ -4,6 +4,7 @@ Usage:
     dcos spark --help
     dcos spark --info
     dcos spark --version
+    dcos spark --config-schema
     dcos spark run --help
     dcos spark run --submit-args=<spark-args>
     dcos spark status <submissionId>
@@ -42,6 +43,9 @@ def print_webui(args):
     print discovery.get_spark_webui()
     return 0
 
+def print_schema():
+    print "{}"
+
 def main():
     args = docopt.docopt(
         __doc__,
@@ -49,6 +53,8 @@ def main():
 
     if args['--info']:
         print(__doc__.split('\n')[0])
+    elif args['--config-schema']:
+        print_schema()
     elif args['run'] and args['--help']:
         return show_spark_submit_help()
     elif args['run']:
