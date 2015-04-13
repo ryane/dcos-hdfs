@@ -1,39 +1,39 @@
-DCOS Spark Subcommand
+DCOS hdfs Subcommand
 ==========================
 Basic DCOS subcommand
 
 Setup
 -----
 #. Make sure you meet requirements for installing packages_
-#. Clone git repo for the dcos spark cli::
+#. Clone git repo for the dcos hdfs cli::
 
-    git clone git@github.com:mesosphere/dcos-spark.git
+    git clone git@github.com:mesosphere/dcos-hdfs.git
 
 #. Change directory to the repo directory::
 
-    cd dcos-spark
-
-#. Make sure that you have virtualenv installed. If not type::
-
-    sudo pip install virtualenv
-
-#. Create a virtualenv for the project::
-
-    make env
+    cd dcos-hdfs
 
 Configure Environment and Run
 -----------------------------
 
 #. TODO: Talk about how to configure the root dcos cli
 
-#. :code:`source` the setup file to add the :code:`dcos-spark` command line interface to your
+#. :code:`source` the setup file to add the :code:`dcos-hdfs` command line interface to your
    :code:`PATH`::
 
     source env/bin/activate
 
-#. Get started by calling the DCOS Spark CLI's help::
+#. Get started by calling the DCOS hdfs CLI's help::
 
-    dcos spark help
+    dcos hdfs help
+
+#. Generate an `options.json` file for your HDFS deployment::
+
+    dcos hdfs config-gen /path/to/mesos-site.xml
+
+#. Then you can use the dcos cli to install hdfs like so::
+
+    dcos package install --options=options.json hdfs
 
 Running Tests:
 --------------
