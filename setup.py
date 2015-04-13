@@ -2,7 +2,7 @@ import os
 from setuptools import setup, find_packages
 from codecs import open
 
-from dcos_spark import constants
+from dcos_hdfs import constants
 
 
 here = os.path.abspath(os.path.dirname(__file__))
@@ -32,18 +32,18 @@ def get_filepaths(package, directory):
 
 
 setup(
-    name='dcos-spark',
+    name='dcos-hdfs',
 
     # Versions should comply with PEP440.  For a discussion on single-sourcing
     # the version across setup.py and the project code, see
     # https://packaging.python.org/en/latest/single_source_version.html
     version=constants.version,
 
-    description='DCOS Spark Command Line Interface',
+    description='DCOS HDFS Command Line Interface',
     long_description=long_description,
 
     # The project's main homepage.
-    url='https://github.com/mesosphere/dcos-spark',
+    url='https://github.com/mesosphere/dcos-hdfs',
 
     # Author details
     author='Mesosphere, Inc.',
@@ -77,7 +77,7 @@ setup(
     ],
 
     # What does your project relate to?
-    keywords='dcos command spark mesosphere',
+    keywords='dcos command hdfs mesosphere',
 
     # You can just specify the packages manually here if your project is
     # simple. Or you can use find_packages().
@@ -106,7 +106,7 @@ setup(
     # installed, specify them here.  If using Python 2.6 or less, then these
     # have to be included in MANIFEST.in as well.
     package_data={
-        'dcos_spark': get_filepaths('dcos_spark', 'data'),
+        'dcos_hdfs': get_filepaths('dcos_hdfs', 'data'),
     },
 
     # Although 'package_data' is the preferred approach, in some case you may
@@ -120,7 +120,7 @@ setup(
     # pip to create the appropriate form of executable for the target platform.
     entry_points={
         'console_scripts': [
-            'dcos-spark=dcos_spark.cli:main',
+            'dcos-hdfs=dcos_hdfs.cli:main',
         ],
     },
 )
