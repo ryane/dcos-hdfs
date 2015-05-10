@@ -6,6 +6,13 @@ Usage:
     dcos hdfs --version
     dcos hdfs config-gen <filename>
 
+Commands:
+    config-gen: This subcommand allows you to create a configuration file
+                to pass into a DCOS package install command for HDFS. Please
+                copy and configure your own mesos-site.xml file and pass it
+                into config-gen to generate your own 'options.json' file.
+                Then you may install your customized version of HDFS with
+                'dcos package install --options=./options.json hdfs'
 Options:
     --help                  Show this screen
     --info                  Show info
