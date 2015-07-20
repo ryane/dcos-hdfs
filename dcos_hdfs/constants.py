@@ -1,4 +1,5 @@
 version = '0.1.0'
-"""DCOS Spark version"""
+"""DCOS HDFS version"""
 
-custom_config_key = 'hdfs/custom-config'
+root_key = 'hdfs'
+custom_config_key = 'custom-config'

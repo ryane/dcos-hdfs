@@ -36,8 +36,8 @@ def gen_config(args):
     with open (filename, "r") as config_file:
         data = config_file.read().encode('ascii')
 
-    config = {}
-    config[constants.custom_config_key] = base64.b64encode(data).decode('utf-8')
+    config = {constants.root_key: {}}
+    config[constants.root_key][constants.custom_config_key] = base64.b64encode(data).decode('utf-8')
 
     with open('options.json', 'w') as config_output:
         json.dump(config, config_output,
